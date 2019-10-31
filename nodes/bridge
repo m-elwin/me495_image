@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+""" A python node to read images from a web camera and process with opencv 
+
+    Subscribes: usb_cam/image_raw
+    Publishes: image_processed
+"""
+
+import rospy
+from cv_bridge import CvBridge
+from sensor_msgs.msg import Image
+
+class Processor(object):
+    """ Process the images """
+    def __init__(self):
+        self._pub = rospy.Publisher("image_processed", Image, queue_size = 10)
+        self._sub = rospy.Subscriber("usb_cam/image_raw", Image, self.callback)
+
+    def callback(self, data):
+        self._pub.publish(data)
+
+if __name__ == "__main__":
+    rospy.init_node("bridge")
+    bridge = CvBridge()
+    p = Processor()
+    rospy.spin()
