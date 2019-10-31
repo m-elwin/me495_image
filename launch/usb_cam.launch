@@ -1,5 +1,5 @@
 <launch>
-    <node pkg="usb_cam" type="usb_cam_node" name="cam1">
+    <node pkg="usb_cam" type="usb_cam_node" name="usb_cam">
       <!-- Parameters used to find the camera -->
       <param name="pixel_format" value="yuyv"/>
     </node>
