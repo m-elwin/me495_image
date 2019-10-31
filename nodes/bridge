@@ -8,18 +8,28 @@
 import rospy
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
+import cv2
 
 class Processor(object):
     """ Process the images """
     def __init__(self):
+        self._bridge = CvBridge()
         self._pub = rospy.Publisher("image_processed", Image, queue_size = 10)
         self._sub = rospy.Subscriber("usb_cam/image_raw", Image, self.callback)
 
     def callback(self, data):
-        self._pub.publish(data)
+        # convert to open cv
+        cv_image = self._bridge.imgmsg_to_cv2(data)
+
+        # manipulate with open cv
+        low_res = cv2.blur(cv_image, (50, 50))
+        
+        # convert to ROS
+        msg = self._bridge.cv2_to_imgmsg(low_res)
+
+        self._pub.publish(msg)
 
 if __name__ == "__main__":
     rospy.init_node("bridge")
-    bridge = CvBridge()
     p = Processor()
     rospy.spin()
