@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """ A python node to read images from a web camera and process with opencv 
 
-    Subscribes: usb_cam/image_raw
-    Publishes: image_processed
+    Subscribes: usb_cam/image_raw (sensor_msgs/Image) - The input raw image
+    Publishes: image_processed (sensor_msgs/Image) - The processed image
 """
 
 import rospy
@@ -18,14 +18,19 @@ class Processor(object):
         self._sub = rospy.Subscriber("usb_cam/image_raw", Image, self.callback)
 
     def callback(self, data):
+        """ Callback for processing an image
+    
+        Args: 
+            data (sensor_msgs/Image) the raw image from the camera
+        """
         # convert to open cv
-        cv_image = self._bridge.imgmsg_to_cv2(data)
+        cv_image = self._bridge.imgmsg_to_cv2(data, "bgr8")
 
         # manipulate with open cv
         low_res = cv2.blur(cv_image, (50, 50))
         
         # convert to ROS
-        msg = self._bridge.cv2_to_imgmsg(low_res)
+        msg = self._bridge.cv2_to_imgmsg(low_res, "bgr8")
 
         self._pub.publish(msg)
 
