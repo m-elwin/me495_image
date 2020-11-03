@@ -5,5 +5,5 @@
       <param name="pixel_format" value="yuyv"/>
       <param name="video_device" value="$(arg video_device)" />
     </node>
-    <node name="process" type="bridge" pkg="me495_image" />
+    <node name="process" type="face_blur" pkg="me495_image" />
 </launch>
