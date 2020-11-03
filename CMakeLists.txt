@@ -151,7 +151,7 @@ include_directories(
 #############
 ## Install ##
 #############
-catkin_install_python(PROGRAMS nodes/bridge
+catkin_install_python(PROGRAMS nodes/bridge nodes/face_blur
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 # all install targets should use catkin DESTINATION variables
